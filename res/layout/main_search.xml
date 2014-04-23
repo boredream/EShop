@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dp"
+    android:background="#ffefebe7"
+    android:orientation="vertical" >
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="输入要搜索的商品" />
+    
+    <TextView 
+        android:layout_marginTop="50dp"
+        android:textColor="@color/black"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="热门搜索:\n\n\n   Lv   冲锋衣   爱马仕\n\n   比基尼   UGG"
+        />
+
+</LinearLayout>
