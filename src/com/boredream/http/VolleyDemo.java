@@ -50,9 +50,9 @@ public class VolleyDemo extends Activity {
 		iv_netiv5 = (NetworkImageView) findViewById(R.id.iv_netiv5);
 
 		getJSONByVolley();
-//		loadImageByVolley();
-//		showImageByNetworkImageView();
-//		getStringVolley();
+		loadImageByVolley();
+		showImageByNetworkImageView();
+		getStringVolley();
 	}
 
 	private void getStringVolley() {

@@ -1,11 +1,16 @@
 package com.boredream.http;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.http.protocol.HTTP;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -14,12 +19,15 @@ import android.support.v4.util.LruCache;
 import android.widget.ImageView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageLoader.ImageCache;
 import com.android.volley.toolbox.ImageLoader.ImageContainer;
@@ -33,10 +41,26 @@ import com.google.gson.Gson;
 public class VolleyUtils {
 	
 	private static String GET_PARAMS_CHARSET_NAME = "UTF-8";
+	private static String DEFAULT_RESPONSE_CHARSET_NAME = "UTF-8";
 	private static final int IMAGE_CACHE_NUMBER = 20;
 	
 	public static int defaultImageResId = R.drawable.ic_launcher;
 	public static int errorImageResId = R.drawable.ic_launcher;
+	
+	/**
+	 * get方式获取字符串数据(json或者其他内容)
+	 * 
+	 * @param context
+	 * @param url		已经拼装好参数的url
+	 * @param listener	响应回调
+	 */
+	public static void getString(Context context, String url,
+			final OnStringResponseListener listener) {
+		// 含有中文的url会失败,需要经过编码
+		String encodeGetParamsUrl = encodeGetParamsUrl(url);
+		System.out.println(encodeGetParamsUrl);
+		doString(context, encodeGetParamsUrl, Request.Method.GET, null, listener);
+	}
 
 	/**
 	 * get方式获取字符串数据(json或者其他内容)
@@ -48,7 +72,7 @@ public class VolleyUtils {
 	 */
 	public static void getString(Context context, String url, Map<String, Object> getParams, 
 			final OnStringResponseListener listener) {
-		String paramsUrl = getAddGetParamsUrl(url, getParams);
+		String paramsUrl = addParams4GetUrl(url, getParams);
 		doString(context, paramsUrl, Request.Method.GET, null, listener);
 	}
 
@@ -62,7 +86,7 @@ public class VolleyUtils {
 	 */
 	public static void getString(Context context, String url, Bean2Paramsable bean, 
 			final OnStringResponseListener listener) {
-		String paramsUrl = getAddGetParamsUrl(url, bean2params(bean));
+		String paramsUrl = addParams4GetUrl(url, bean2params(bean));
 		doString(context, paramsUrl, Request.Method.GET, null, listener);
 	}
 
@@ -103,7 +127,7 @@ public class VolleyUtils {
 	 * @param url
 	 * @param params	get提交方式的参数,会自动解析并与url拼装
 	 * @param listener	响应回调,直接从json解析成Object对象
-	 * @param clazz		json封装的数据类型
+	 * @param clazz		想要将json封装成对象的数据类型
 	 */
 	public static <T> void getJsonObject(Context context, String url, Map<String, Object> params,
 			final OnJsonResponseListener<T> listener, final Class<T> clazz) {
@@ -120,11 +144,11 @@ public class VolleyUtils {
 	 * @param url
 	 * @param bean		请求bean,会自动按照变量名-变量值的创建键值对封装为参数与url拼装
 	 * @param listener	响应回调,直接从json解析成Object对象
-	 * @param clazz		json封装的数据类型
+	 * @param clazz		想要将json封装成对象的数据类型
 	 */
 	public static <T> void getJsonObject(Context context, String url, Bean2Paramsable bean,
 			final OnJsonResponseListener<T> listener, final Class<T> clazz) {
-		String paramsUrl = getAddGetParamsUrl(url, bean2params(bean));
+		String paramsUrl = addParams4GetUrl(url, bean2params(bean));
 		doJsonObject(context, paramsUrl, Request.Method.GET, null, listener, clazz);
 	}
 
@@ -138,7 +162,7 @@ public class VolleyUtils {
 	 * @param url
 	 * @param params	post的数据<String, Object>
 	 * @param listener	响应回调,直接从json解析成Object对象
-	 * @param clazz		json封装的数据类型
+	 * @param clazz		想要将json封装成对象的数据类型
 	 */
 	public static <T> void postJsonObject(Context context, String url,
 			final Map<String, Object> params,
@@ -156,9 +180,10 @@ public class VolleyUtils {
 	 * @param url
 	 * @param bean		请求bean,会自动按照变量名-变量值的创建键值对封装为参数数组map
 	 * @param listener	响应回调,直接从json解析成Object对象
-	 * @param clazz		json封装的数据类型
+	 * @param clazz		想要将json封装成对象的数据类型
 	 */
-	public static <T> void postJsonObject(Context context, String url, Bean2Paramsable bean,
+	public static <T> void postJsonObject(Context context, String url, 
+			final Bean2Paramsable bean,
 			final OnJsonResponseListener<T> listener, final Class<T> clazz) {
 		Map<String, Object> params = bean2params(bean);
 		doJsonObject(context, url, Request.Method.POST, params, listener, clazz);
@@ -166,6 +191,7 @@ public class VolleyUtils {
 
 	/**
 	 * 利用Volley异步加载图片
+	 * 
 	 * @param context
 	 * @param imageUrl
 	 * @param iv
@@ -176,6 +202,7 @@ public class VolleyUtils {
 
 	/**
 	 * 利用Volley异步加载图片,有回调型
+	 * 
 	 * @param context
 	 * @param imageUrl
 	 * @param iv
@@ -232,12 +259,14 @@ public class VolleyUtils {
 
 	/**
 	 * 获取get方式拼接后的url
+	 * 
 	 * <p>例如url为"http:www.abc.com/get"参数map集合为["a":1, "b":"aaaaaa"]则拼装后的url为"http:www.abc.com/get?a=1&b=aaaaaa"
+	 * 
 	 * @param url			原url
-	 * @param getParams		需要拼接的参数map集合
+	 * @param getParams		需要拼接的参数map集合,value值有中文时以默认utf-8编码
 	 * @return 				拼装完成的url
 	 */
-	private static String getAddGetParamsUrl(String url, Map<String, Object> getParams) {
+	private static String addParams4GetUrl(String url, Map<String, Object> getParams) {
 		StringBuilder newUrl = new StringBuilder(url);
 		if(getParams != null && getParams.size() > 0) {
 			newUrl.append("?");
@@ -252,10 +281,32 @@ public class VolleyUtils {
 		}
 		return newUrl.toString();
 	}
+	
+	/**
+	 * 将url参数中的中文用GET_PARAMS_CHARSET_NAME=utf-8去encode一下
+	 * @param url 	处理前url
+	 * @return		encode后的url
+	 */
+	private static String encodeGetParamsUrl(String url) {
+		String paramsUrl = url.substring(url.indexOf("?"));
+		String regex = "[\\u4e00-\\u9fa5]+";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(paramsUrl);
+		while (matcher.find()) { 
+			String cString = matcher.group();
+			try {
+				paramsUrl = paramsUrl.replace(cString,
+						URLEncoder.encode(cString, GET_PARAMS_CHARSET_NAME));
+			} catch (UnsupportedEncodingException e) { }
+        }
+		return paramsUrl;
+	}
 
 	/**
 	 * 将对象转为map数组,方便作为请求参数使用
+	 * 
 	 * <p>map数组中保存对象类所有的变量,变量命作为key,变量具体值作为value
+	 * 
 	 * @param bean	需要转换的对象
 	 * @return		转换后的map数组
 	 */
@@ -268,16 +319,28 @@ public class VolleyUtils {
 		}
 		return params;
 	}
-
+	
 	/**
-	 * 获取json对象
-	 * @param context
-	 * @param url
-	 * @param method
-	 * @param postParams
-	 * @param listener
-	 * @param clazz
-	 */
+     * 返回响应header数据中的编码格式,如果没有的话返回默认值
+     * DEFAULT_RESPONSE_CHARSET_NAME = UTF-8
+     */
+	private static String parseCharset(Map<String, String> headers) {
+        String contentType = headers.get(HTTP.CONTENT_TYPE);
+        if (contentType != null) {
+            String[] params = contentType.split(";");
+            for (int i = 1; i < params.length; i++) {
+                String[] pair = params[i].trim().split("=");
+                if (pair.length == 2) {
+                    if (pair[0].equals("charset")) {
+                        return pair[1];
+                    }
+                }
+            }
+        }
+
+        return DEFAULT_RESPONSE_CHARSET_NAME;
+    }
+
 	private static <T> void doJsonObject(Context context, String url, int method, 
 			final Map<String, Object> postParams, 
 			final OnJsonResponseListener<T> listener, final Class<T> clazz) {
@@ -310,6 +373,24 @@ public class VolleyUtils {
 				}
 				return params;
 			}
+			/* 复写parseNetworkResponse方法修改响应数据中文编码方式,
+			 * 获取响应数据编码格式编码中文,如果获取失败则默认以
+			 * DEFAULT_RESPONSE_CHARSET_NAME = UTF-8 编码
+			 * 注:HttpHeaderParser.parseCacheHeaders(response)不用修改
+			 */
+			@Override
+			protected Response<JSONObject> parseNetworkResponse(
+					NetworkResponse response) {
+				try {
+					String jsonString = new String(response.data, parseCharset(response.headers));
+					return Response.success(new JSONObject(jsonString), 
+							HttpHeaderParser.parseCacheHeaders(response));
+				} catch (UnsupportedEncodingException e) {
+					return Response.error(new ParseError(e));
+				} catch (JSONException je) {
+					return Response.error(new ParseError(je));
+				}
+			}
 			
 		};
 		requestQueue.add(jsonObjectRequest);
@@ -341,7 +422,21 @@ public class VolleyUtils {
 				}
 				return params;
 			}
-			
+			/* 复写parseNetworkResponse方法修改响应数据中文编码方式,
+			 * 获取响应数据编码格式编码中文,如果获取失败则默认以
+			 * DEFAULT_RESPONSE_CHARSET_NAME = UTF-8 编码
+			 */
+			@Override
+			protected Response<String> parseNetworkResponse(
+					NetworkResponse response) {
+				String parsed;
+		        try {
+		            parsed = new String(response.data, parseCharset(response.headers));
+		        } catch (UnsupportedEncodingException e) {
+		            parsed = new String(response.data);
+		        }
+		        return Response.success(parsed, HttpHeaderParser.parseCacheHeaders(response));
+			}
 		};
 		sRequest.setShouldCache(false);
 		requestQueue.add(sRequest);

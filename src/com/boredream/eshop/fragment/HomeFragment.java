@@ -1,33 +1,25 @@
 package com.boredream.eshop.fragment;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.json.JSONObject;
-
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.boredream.BaseFragment;
 import com.boredream.eshop.R;
 import com.boredream.eshop.adapter.GridViewAdapter;
 import com.boredream.eshop.adapter.ImagePagerAdatper;
-import com.boredream.eshop.bean.AnnResponse;
 import com.boredream.http.VolleyUtils;
-import com.boredream.http.VolleyUtils.OnJsonResponseListener;
+import com.boredream.http.VolleyUtils.OnStringResponseListener;
 
 public class HomeFragment extends BaseFragment {
 	private ViewPager ImageVp;
@@ -45,18 +37,35 @@ public class HomeFragment extends BaseFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		VolleyUtils.getJson(activity, "http://42.96.153.196:8080/AndroidService.svc/GetGroupInformationList?groupID=549&userID=2416&page=1", new OnJsonResponseListener<AnnResponse>() {
-
+//		VolleyUtils.getJsonObject(activity, "http://42.96.153.196:8080/AndroidService.svc/GetGroupInformationList?groupID=549&userID=2416&page=1", new OnJsonResponseListener<AnnResponse>() {
+//
+//			@Override
+//			public void onResponse(AnnResponse ann) {
+//				System.out.println(ann.total);
+//			}
+//
+//			@Override
+//			public void onErrorResponse(VolleyError errorInfo) {
+//				System.out.println(errorInfo.toString());
+//			}
+//		}, AnnResponse.class);
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+//		?location=北京&output=json&ak=640f3985a6437dad8135dae98d775a09
+		params.put("location", "北京");
+		params.put("output", "json");
+		params.put("ak", "640f3985a6437dad8135dae98d775a09");
+		VolleyUtils.getString(activity, "http://api.map.baidu.com/telematics/v3/weather", params, new OnStringResponseListener() {
 			@Override
-			public void onResponse(AnnResponse ann) {
-				System.out.println(ann.total);
+			public void onErrorResponse(VolleyError error) {
+				System.out.println(error.toString());
 			}
-
+			
 			@Override
-			public void onErrorResponse(VolleyError errorInfo) {
-				System.out.println(errorInfo.toString());
+			public void onResponse(String str) {
+				System.out.println(str);
 			}
-		}, AnnResponse.class);
+		});
 	}
 
 	@Override
