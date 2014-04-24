@@ -56,10 +56,7 @@ public class VolleyUtils {
 	 */
 	public static void getString(Context context, String url,
 			final OnStringResponseListener listener) {
-		// 含有中文的url会失败,需要经过编码
-		String encodeGetParamsUrl = encodeGetParamsUrl(url);
-		System.out.println(encodeGetParamsUrl);
-		doString(context, encodeGetParamsUrl, Request.Method.GET, null, listener);
+		doString(context, url, Request.Method.GET, null, listener);
 	}
 
 	/**
@@ -281,25 +278,25 @@ public class VolleyUtils {
 		}
 		return newUrl.toString();
 	}
-	
+
 	/**
 	 * 将url参数中的中文用GET_PARAMS_CHARSET_NAME=utf-8去encode一下
 	 * @param url 	处理前url
 	 * @return		encode后的url
 	 */
 	private static String encodeGetParamsUrl(String url) {
-		String paramsUrl = url.substring(url.indexOf("?"));
+		// 中文正则
 		String regex = "[\\u4e00-\\u9fa5]+";
 		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(paramsUrl);
-		while (matcher.find()) { 
+		Matcher matcher = pattern.matcher(url);
+		while (matcher.find()) {
 			String cString = matcher.group();
 			try {
-				paramsUrl = paramsUrl.replace(cString,
-						URLEncoder.encode(cString, GET_PARAMS_CHARSET_NAME));
+				url = url.replaceFirst(cString, URLEncoder.encode(
+						cString, GET_PARAMS_CHARSET_NAME));
 			} catch (UnsupportedEncodingException e) { }
-        }
-		return paramsUrl;
+		}
+		return url;
 	}
 
 	/**
@@ -344,10 +341,13 @@ public class VolleyUtils {
 	private static <T> void doJsonObject(Context context, String url, int method, 
 			final Map<String, Object> postParams, 
 			final OnJsonResponseListener<T> listener, final Class<T> clazz) {
+		// 含有中文的url会失败,需要经过编码
+		String encodeGetParamsUrl = encodeGetParamsUrl(url);
+		
 		RequestQueue requestQueue = Volley.newRequestQueue(context);
 		
 		JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-				method, url, null,
+				method, encodeGetParamsUrl, null,
 				new Response.Listener<JSONObject>() {
 					@Override
 					public void onResponse(JSONObject response) {
@@ -398,8 +398,11 @@ public class VolleyUtils {
 
 	private static void doString(Context context, String url, int method, 
 			final Map<String, Object> postParams, final OnStringResponseListener listener) {
+		// 含有中文的url会失败,需要经过编码
+		String encodeGetParamsUrl = encodeGetParamsUrl(url);
+		
 		RequestQueue requestQueue = Volley.newRequestQueue(context);
-		StringRequest sRequest = new StringRequest(method, url, 
+		StringRequest sRequest = new StringRequest(method, encodeGetParamsUrl, 
 				new Listener<String>() {
 					@Override
 					public void onResponse(String response) {
