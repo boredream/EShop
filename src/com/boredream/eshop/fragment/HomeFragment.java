@@ -1,7 +1,5 @@
 package com.boredream.eshop.fragment;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,11 +16,12 @@ import com.boredream.BaseFragment;
 import com.boredream.eshop.R;
 import com.boredream.eshop.adapter.GridViewAdapter;
 import com.boredream.eshop.adapter.ImagePagerAdatper;
-import com.boredream.http.VolleyUtils;
-import com.boredream.http.VolleyUtils.OnStringResponseListener;
+import com.boredream.volley.BDListener;
+import com.boredream.volley.BDVolley;
+import com.boredream.volley.BDVolleyHttp;
 
 public class HomeFragment extends BaseFragment {
-	private ViewPager ImageVp;
+	private ViewPager vpImage;
 	private GridView gvHot;
 	private GridView gvNew;
 
@@ -33,37 +32,21 @@ public class HomeFragment extends BaseFragment {
 	private int currentPosition;
 	private Timer timer;
 
+	String url = "http://42.96.153.196:8080/AndroidService.svc/GetGroupInformationList?groupID=549&userID=2416&page=1";
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-//		VolleyUtils.getJsonObject(activity, "http://42.96.153.196:8080/AndroidService.svc/GetGroupInformationList?groupID=549&userID=2416&page=1", new OnJsonResponseListener<AnnResponse>() {
-//
-//			@Override
-//			public void onResponse(AnnResponse ann) {
-//				System.out.println(ann.total);
-//			}
-//
-//			@Override
-//			public void onErrorResponse(VolleyError errorInfo) {
-//				System.out.println(errorInfo.toString());
-//			}
-//		}, AnnResponse.class);
-		
-		Map<String, Object> params = new HashMap<String, Object>();
-//		?location=北京&output=json&ak=640f3985a6437dad8135dae98d775a09
-		params.put("location", "北京");
-		params.put("output", "json");
-		params.put("ak", "640f3985a6437dad8135dae98d775a09");
-		VolleyUtils.getString(activity, "http://api.map.baidu.com/telematics/v3/weather", params, new OnStringResponseListener() {
+		BDVolleyHttp.getString(getActivity(), url, new BDListener<String>() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
 				System.out.println(error.toString());
 			}
 			
 			@Override
-			public void onResponse(String str) {
-				System.out.println(str);
+			public void onResponse(String response) {
+				System.out.println(response);
 			}
 		});
 	}
@@ -79,9 +62,9 @@ public class HomeFragment extends BaseFragment {
 					@Override
 					public void run() {
 						if (currentPosition == 2) {
-							ImageVp.setCurrentItem(0);
+							vpImage.setCurrentItem(0);
 						} else {
-							ImageVp.setCurrentItem(currentPosition + 1);
+							vpImage.setCurrentItem(currentPosition + 1);
 						}
 					}
 				});
@@ -101,12 +84,16 @@ public class HomeFragment extends BaseFragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.main_home, container, false);
 
-		ImageVp = (ViewPager) view.findViewById(R.id.home_vp_image);
+		vpImage = (ViewPager) view.findViewById(R.id.home_vp_image);
 		gvHot = (GridView) view.findViewById(R.id.home_gv_hot);
 		gvNew = (GridView) view.findViewById(R.id.home_gv_new);
-		imageAdapter = new ImagePagerAdatper(activity);
-		ImageVp.setAdapter(imageAdapter);
-		ImageVp.setOnPageChangeListener(new OnPageChangeListener() {
+		imageAdapter = new ImagePagerAdatper(activity, new String[]{
+				"https://lh3.googleusercontent.com/-LMUs793rAL4/SUQczGj6CBI/AAAAAAAAJqs/NLBzZMDMhS4/s720/P7300049aasd.JPG",
+				"http://www.zhaozuzhiapp.com:145/Items/GetImageByID?imageID=516036",
+				"http://www.zhaozuzhiapp.com:145/Items/GetImageByID?imageID=516048"
+		});
+		vpImage.setAdapter(imageAdapter);
+		vpImage.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override
 			public void onPageSelected(final int position) {

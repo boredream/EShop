@@ -1,15 +1,9 @@
-package com.boredream.http;
+package com.boredream.volley;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
-import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,7 +18,6 @@ import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
@@ -35,18 +28,10 @@ import com.android.volley.toolbox.ImageLoader.ImageListener;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.boredream.eshop.R;
+import com.boredream.volley.BDVolleyUtils.Bean2Paramsable;
 import com.google.gson.Gson;
 
-public class VolleyUtils {
-	
-	private static String GET_PARAMS_CHARSET_NAME = "UTF-8";
-	private static String DEFAULT_RESPONSE_CHARSET_NAME = "UTF-8";
-	private static final int IMAGE_CACHE_NUMBER = 20;
-	
-	public static int defaultImageResId = R.drawable.ic_launcher;
-	public static int errorImageResId = R.drawable.ic_launcher;
-	
+public class BDVolleyHttp2 {
 	/**
 	 * get方式获取字符串数据(json或者其他内容)
 	 * 
@@ -55,7 +40,7 @@ public class VolleyUtils {
 	 * @param listener	响应回调
 	 */
 	public static void getString(Context context, String url,
-			final OnStringResponseListener listener) {
+			final BDListener<String> listener) {
 		doString(context, url, Request.Method.GET, null, listener);
 	}
 
@@ -68,8 +53,8 @@ public class VolleyUtils {
 	 * @param listener	响应回调
 	 */
 	public static void getString(Context context, String url, Map<String, Object> getParams, 
-			final OnStringResponseListener listener) {
-		String paramsUrl = addParams4GetUrl(url, getParams);
+			final BDListener<String> listener) {
+		String paramsUrl = BDVolleyUtils.parseGetUrlWithParams(url, getParams);
 		doString(context, paramsUrl, Request.Method.GET, null, listener);
 	}
 
@@ -82,8 +67,8 @@ public class VolleyUtils {
 	 * @param listener	响应回调
 	 */
 	public static void getString(Context context, String url, Bean2Paramsable bean, 
-			final OnStringResponseListener listener) {
-		String paramsUrl = addParams4GetUrl(url, bean2params(bean));
+			final BDListener<String> listener) {
+		String paramsUrl = BDVolleyUtils.parseGetUrlWithParams(url, BDVolleyUtils.bean2params(bean));
 		doString(context, paramsUrl, Request.Method.GET, null, listener);
 	}
 
@@ -96,7 +81,7 @@ public class VolleyUtils {
 	 * @param listener	响应回调
 	 */
 	public static void postString(Context context, String url, Map<String, Object> params, 
-			final OnStringResponseListener listener) {
+			final BDListener<String> listener) {
 		doString(context, url, Request.Method.POST, params, listener);
 	}
 
@@ -109,8 +94,8 @@ public class VolleyUtils {
 	 * @param listener	响应回调
 	 */
 	public static void postString(Context context, String url, Bean2Paramsable bean,
-			final OnStringResponseListener listener) {
-		Map<String, Object> params = bean2params(bean);
+			final BDListener<String> listener) {
+		Map<String, Object> params = BDVolleyUtils.bean2params(bean);
 		doString(context, url, Request.Method.POST, params, listener);
 	}
 	
@@ -127,7 +112,7 @@ public class VolleyUtils {
 	 * @param clazz		想要将json封装成对象的数据类型
 	 */
 	public static <T> void getJsonObject(Context context, String url, Map<String, Object> params,
-			final OnJsonResponseListener<T> listener, final Class<T> clazz) {
+			final BDListener<T> listener, final Class<T> clazz) {
 		doJsonObject(context, url, Request.Method.GET, null, listener, clazz);
 	}
 	
@@ -144,8 +129,8 @@ public class VolleyUtils {
 	 * @param clazz		想要将json封装成对象的数据类型
 	 */
 	public static <T> void getJsonObject(Context context, String url, Bean2Paramsable bean,
-			final OnJsonResponseListener<T> listener, final Class<T> clazz) {
-		String paramsUrl = addParams4GetUrl(url, bean2params(bean));
+			final BDListener<T> listener, final Class<T> clazz) {
+		String paramsUrl = BDVolleyUtils.parseGetUrlWithParams(url, BDVolleyUtils.bean2params(bean));
 		doJsonObject(context, paramsUrl, Request.Method.GET, null, listener, clazz);
 	}
 
@@ -163,7 +148,7 @@ public class VolleyUtils {
 	 */
 	public static <T> void postJsonObject(Context context, String url,
 			final Map<String, Object> params,
-			final OnJsonResponseListener<T> listener, final Class<T> clazz) {
+			final BDListener<T> listener, final Class<T> clazz) {
 		doJsonObject(context, url, Request.Method.POST, params, listener, clazz);
 	}
 	
@@ -181,8 +166,8 @@ public class VolleyUtils {
 	 */
 	public static <T> void postJsonObject(Context context, String url, 
 			final Bean2Paramsable bean,
-			final OnJsonResponseListener<T> listener, final Class<T> clazz) {
-		Map<String, Object> params = bean2params(bean);
+			final BDListener<T> listener, final Class<T> clazz) {
+		Map<String, Object> params = BDVolleyUtils.bean2params(bean);
 		doJsonObject(context, url, Request.Method.POST, params, listener, clazz);
 	}
 
@@ -209,7 +194,7 @@ public class VolleyUtils {
 			final ImageView iv, final OnImageCompleteListener listener) {
 		RequestQueue requestQueue = Volley.newRequestQueue(context);
 		final LruCache<String, Bitmap> lruCache = new LruCache<String, Bitmap>(
-				IMAGE_CACHE_NUMBER);
+				BDVolleyConfig.IMAGE_CACHE_COUNT);
 		ImageCache imageCache = new ImageCache() {
 			@Override
 			public void putBitmap(String key, Bitmap value) {
@@ -225,8 +210,8 @@ public class VolleyUtils {
 		imageLoader.get(imageUrl, new ImageListener() {
 			 @Override
 	            public void onErrorResponse(VolleyError error) {
-	                if (errorImageResId != 0) {
-	                	iv.setImageResource(errorImageResId);
+	                if (BDVolleyConfig.ERROR_IMAGE_RESID != 0) {
+	                	iv.setImageResource(BDVolleyConfig.ERROR_IMAGE_RESID);
 	                }
 	                if(listener != null) {
 	                	listener.onErrorResponse(error);
@@ -240,12 +225,8 @@ public class VolleyUtils {
 	                	if(listener != null) {
 	                		listener.onComplete(response.getBitmap());
 	                	}
-	                } else if (defaultImageResId != 0) {
-	                	iv.setImageResource(defaultImageResId);
-	                	if(listener != null) {
-	                		listener.onComplete(null);
-	                	}
-	                } else {
+	                } else if (BDVolleyConfig.DEFAULT_IMAGE_RESID != 0) {
+	                	iv.setImageResource(BDVolleyConfig.DEFAULT_IMAGE_RESID);
 	                	if(listener != null) {
 	                		listener.onComplete(null);
 	                	}
@@ -253,96 +234,12 @@ public class VolleyUtils {
 	            }
 		});
 	}
-
-	/**
-	 * 获取get方式拼接后的url
-	 * 
-	 * <p>例如url为"http:www.abc.com/get"参数map集合为["a":1, "b":"aaaaaa"]则拼装后的url为"http:www.abc.com/get?a=1&b=aaaaaa"
-	 * 
-	 * @param url			原url
-	 * @param getParams		需要拼接的参数map集合,value值有中文时以默认utf-8编码
-	 * @return 				拼装完成的url
-	 */
-	private static String addParams4GetUrl(String url, Map<String, Object> getParams) {
-		StringBuilder newUrl = new StringBuilder(url);
-		if(getParams != null && getParams.size() > 0) {
-			newUrl.append("?");
-			for(Entry<String, Object> entry : getParams.entrySet()) {
-				try {
-					newUrl.append(entry.getKey() + "=" 
-							+ URLEncoder.encode(entry.getValue().toString(), 
-									GET_PARAMS_CHARSET_NAME) + "&");
-				} catch (Exception e) { }
-			}
-			newUrl.substring(0, newUrl.length()-2);
-		}
-		return newUrl.toString();
-	}
-
-	/**
-	 * 将url参数中的中文用GET_PARAMS_CHARSET_NAME=utf-8去encode一下
-	 * @param url 	处理前url
-	 * @return		encode后的url
-	 */
-	private static String encodeGetParamsUrl(String url) {
-		// 中文正则
-		String regex = "[\\u4e00-\\u9fa5]+";
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(url);
-		while (matcher.find()) {
-			String cString = matcher.group();
-			try {
-				url = url.replaceFirst(cString, URLEncoder.encode(
-						cString, GET_PARAMS_CHARSET_NAME));
-			} catch (UnsupportedEncodingException e) { }
-		}
-		return url;
-	}
-
-	/**
-	 * 将对象转为map数组,方便作为请求参数使用
-	 * 
-	 * <p>map数组中保存对象类所有的变量,变量命作为key,变量具体值作为value
-	 * 
-	 * @param bean	需要转换的对象
-	 * @return		转换后的map数组
-	 */
-	private static Map<String, Object> bean2params(Bean2Paramsable bean) {
-		Map<String, Object> params = new HashMap<String, Object>();
-		for(Field field : bean.getClass().getFields()) {
-			try {
-				params.put(field.getName(), field.get(bean));
-			} catch (Exception e) { }
-		}
-		return params;
-	}
 	
-	/**
-     * 返回响应header数据中的编码格式,如果没有的话返回默认值
-     * DEFAULT_RESPONSE_CHARSET_NAME = UTF-8
-     */
-	private static String parseCharset(Map<String, String> headers) {
-        String contentType = headers.get(HTTP.CONTENT_TYPE);
-        if (contentType != null) {
-            String[] params = contentType.split(";");
-            for (int i = 1; i < params.length; i++) {
-                String[] pair = params[i].trim().split("=");
-                if (pair.length == 2) {
-                    if (pair[0].equals("charset")) {
-                        return pair[1];
-                    }
-                }
-            }
-        }
-
-        return DEFAULT_RESPONSE_CHARSET_NAME;
-    }
-
 	private static <T> void doJsonObject(Context context, String url, int method, 
 			final Map<String, Object> postParams, 
-			final OnJsonResponseListener<T> listener, final Class<T> clazz) {
+			final BDListener<T> listener, final Class<T> clazz) {
 		// 含有中文的url会失败,需要经过编码
-		String encodeGetParamsUrl = encodeGetParamsUrl(url);
+		String encodeGetParamsUrl = BDVolleyUtils.encodeUrl(url);
 		
 		RequestQueue requestQueue = Volley.newRequestQueue(context);
 		
@@ -382,7 +279,8 @@ public class VolleyUtils {
 			protected Response<JSONObject> parseNetworkResponse(
 					NetworkResponse response) {
 				try {
-					String jsonString = new String(response.data, parseCharset(response.headers));
+					String jsonString = new String(response.data, 
+							BDVolleyUtils.getCharsetFromHeaders(response.headers));
 					return Response.success(new JSONObject(jsonString), 
 							HttpHeaderParser.parseCacheHeaders(response));
 				} catch (UnsupportedEncodingException e) {
@@ -397,9 +295,9 @@ public class VolleyUtils {
 	}
 
 	private static void doString(Context context, String url, int method, 
-			final Map<String, Object> postParams, final OnStringResponseListener listener) {
+			final Map<String, Object> postParams, final BDListener<String> listener) {
 		// 含有中文的url会失败,需要经过编码
-		String encodeGetParamsUrl = encodeGetParamsUrl(url);
+		String encodeGetParamsUrl = BDVolleyUtils.encodeUrl(url);
 		
 		RequestQueue requestQueue = Volley.newRequestQueue(context);
 		StringRequest sRequest = new StringRequest(method, encodeGetParamsUrl, 
@@ -434,7 +332,7 @@ public class VolleyUtils {
 					NetworkResponse response) {
 				String parsed;
 		        try {
-		            parsed = new String(response.data, parseCharset(response.headers));
+		            parsed = new String(response.data, BDVolleyUtils.getCharsetFromHeaders(response.headers));
 		        } catch (UnsupportedEncodingException e) {
 		            parsed = new String(response.data);
 		        }
@@ -443,25 +341,5 @@ public class VolleyUtils {
 		};
 		sRequest.setShouldCache(false);
 		requestQueue.add(sRequest);
-	}
-
-	public interface OnImageCompleteListener extends ErrorListener {
-		/**
-		 * 加载图片完成
-		 * @param bitmap 为null时代表图片获取失败
-		 */
-		public void onComplete(Bitmap bitmap);
-	}
-
-	public interface OnJsonResponseListener<T> extends ErrorListener {
-		public void onResponse(T t);
-	}
-
-	public interface OnStringResponseListener extends ErrorListener {
-		public void onResponse(String str);
-	}
-	
-	public interface Bean2Paramsable {
-		/* empty */
 	}
 }
