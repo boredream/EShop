@@ -17,11 +17,13 @@ public class BDVolleyConfig {
 	 */
 	public static int IMAGE_CACHE_TYPE = 1;
 	/**
-	 * IMAGE_CACHE_TYPE=1 时启用. scale=8即用app可用内存的1/8作为图片缓存池总缓存大小
+	 * IMAGE_CACHE_TYPE=1 时启用
+	 * scale=8即用app可用内存的1/8(推荐比例)作为图片缓存池总缓存大小
 	 */
 	public static int IMAGE_CACHE_SCALE = 8;
 	/**
-	 * IMAGE_CACHE_TYPE=2 时启用. count=20即应用缓存池中最多存20张图片
+	 * IMAGE_CACHE_TYPE=2 时启用
+	 * count=20即应用缓存池中最多存20张图片
 	 */
 	public static int IMAGE_CACHE_COUNT = 20;
 	/**

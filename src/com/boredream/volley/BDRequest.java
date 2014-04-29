@@ -39,12 +39,6 @@ public abstract class BDRequest<T> extends Request<T> {
 	}
 	
 	@Override
-	public String getUrl() {
-		System.out.println("url = " + super.getUrl());
-		return super.getUrl();
-	}
-	
-	@Override
 	protected Map<String, String> getParams()
 			throws AuthFailureError {
 		Map<String, String> params = super.getParams();
