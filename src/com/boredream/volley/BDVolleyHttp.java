@@ -126,7 +126,7 @@ public class BDVolleyHttp {
 	 * @param listener 图片回调接口,bitmap为空时即为获取失败
 	 */
 	public static void loadImageByVolley(Context context, String imageUrl, 
-			final ImageView iv, final OnImageCompleteListener listener) {
+			final ImageView iv, final BDImageListener listener) {
 		ImageLoader imageLoader = BDVolley.getImageLoader(context);
 		imageLoader.get(imageUrl, new ImageListener() {
 			 @Override

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
@@ -37,10 +38,10 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
+		
 	    initView();
 	    
-	    rg.check(R.id.main_tab_home);
+	    ((RadioButton) rg.getChildAt(0)).setChecked(true);
 	}
 	
 	@Override
@@ -70,9 +71,9 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
     }
 
 	public void attachFragmentHome() {
-
 		if (homeFragment == null) {
-			ft.add(android.R.id.tabcontent, new HomeFragment(), "home");
+			homeFragment = new HomeFragment();
+			ft.add(android.R.id.tabcontent, homeFragment, "home");
 		} else {
 			ft.attach(homeFragment);
 		}
@@ -81,7 +82,8 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 	public void attachFragmentCategory() {
 
 		if (categoryFragment == null) {
-			ft.add(android.R.id.tabcontent, new CategoryFragment(), "category");
+			categoryFragment = new CategoryFragment();
+			ft.add(android.R.id.tabcontent, categoryFragment, "category");
 		} else {
 			ft.attach(categoryFragment);
 		}
@@ -90,7 +92,8 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 	public void attachFragmentSearch() {
 
 		if (searchFragment == null) {
-			ft.add(android.R.id.tabcontent, new SearchFragment(), "search");
+			searchFragment = new SearchFragment();
+			ft.add(android.R.id.tabcontent, searchFragment, "search");
 		} else {
 			ft.attach(searchFragment);
 		}
@@ -99,7 +102,8 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 	public void attachFragmentMore() {
 
 		if (moreFragment == null) {
-			ft.add(android.R.id.tabcontent, new MoreFragment(), "more");
+			moreFragment = new MoreFragment();
+			ft.add(android.R.id.tabcontent, moreFragment, "more");
 		} else {
 			ft.attach(moreFragment);
 		}
@@ -122,7 +126,6 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 						MainActivity.this.exitApp();
 					}
 		});
-    	super.onBackPressed();
     }
 
 	@Override

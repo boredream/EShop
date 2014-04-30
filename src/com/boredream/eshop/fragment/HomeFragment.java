@@ -1,5 +1,7 @@
 package com.boredream.eshop.fragment;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,9 +18,10 @@ import com.boredream.BaseFragment;
 import com.boredream.eshop.R;
 import com.boredream.eshop.adapter.GridViewAdapter;
 import com.boredream.eshop.adapter.ImagePagerAdatper;
+import com.boredream.eshop.bean.AnnResponse;
 import com.boredream.volley.BDListener;
-import com.boredream.volley.BDVolley;
 import com.boredream.volley.BDVolleyHttp;
+import com.boredream.volley.BDVolleyUtils;
 
 public class HomeFragment extends BaseFragment {
 	private ViewPager vpImage;
@@ -32,28 +35,42 @@ public class HomeFragment extends BaseFragment {
 	private int currentPosition;
 	private Timer timer;
 
-	String url = "http://42.96.153.196:8080/AndroidService.svc/GetGroupInformationList?groupID=549&userID=2416&page=1";
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		BDVolleyHttp.getString(getActivity(), url, new BDListener<String>() {
-			@Override
-			public void onErrorResponse(VolleyError error) {
-				System.out.println(error.toString());
-			}
-			
-			@Override
-			public void onResponse(String response) {
-				System.out.println(response);
-			}
-		});
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
+		
+		String url = "http://42.96.153.196:8080/AndroidService.svc/GetGroupInformationList";
+//		String url = "http://42.96.153.196:8080/AndroidService.svc/GetGroupInformationList?groupID=549&userID=2416&page=1";
+//		String url = "http://www.baidu.com/s?ie=utf-8&bs=taobao&f=8&rsv_bp=1&wd=ÃÀ¾ç&rsv_sug3=2&rsv_sug4=53&rsv_sug1=1&rsv_sug2=0&inputT=2374";
+		
+		// groupID=549&userID=2416&page=1
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("groupID", 549);
+		params.put("userID", 2416);
+		params.put("page", 1);
+		BDVolleyHttp.getJsonObject(
+				getActivity(), 
+				BDVolleyUtils.parseGetUrlWithParams(url, params), 
+				AnnResponse.class, 
+				new BDListener<AnnResponse>(){
+
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						System.out.println("error");
+					}
+
+					@Override
+					public void onResponse(AnnResponse response) {
+						System.out.println("resposne ..." + response.total);
+					}
+		});
+		
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
 			@Override
