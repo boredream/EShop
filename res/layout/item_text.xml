@@ -2,14 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="10dp" >
 
     <TextView
-        android:id="@+id/textitem_tv"
+        android:id="@+id/textitem_tv_name"
         android:layout_width="fill_parent"
-        android:textSize="@dimen/text_size"
+        android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:layout_height="wrap_content" />
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textitem_tv_info"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/text_size_small" />
 
 </LinearLayout>

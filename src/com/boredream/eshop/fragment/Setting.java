@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.boredream.BaseFragment;
 import com.boredream.eshop.R;
 
-public class MoreFragment extends BaseFragment{
+public class Setting extends BaseFragment{
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

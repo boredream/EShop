@@ -10,74 +10,19 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/home_vp_image"
-            android:layout_width="fill_parent"
-            android:layout_height="200dp" />
+        <include layout="@layout/new_tab_index3_bar" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="10dp" >
+        <include layout="@layout/new_tab_index3_tab_btns" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:text="热门商品"
-                android:textSize="15sp" />
+        <include layout="@layout/index_tab_hot_list" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1" />
+        <include
+            layout="@layout/index_tab_promotion_list"
+            android:visibility="gone" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:text="查看更多"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <GridView
-            android:id="@+id/home_gv_hot"
-            android:layout_width="fill_parent"
-            android:layout_height="100dp"
-            android:gravity="center"
-            android:numColumns="3" />
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="10dp" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:text="新品上架"
-                android:textSize="15sp" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:text="查看更多"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <GridView
-            android:id="@+id/home_gv_new"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:numColumns="3"
-            android:scrollbars="none" />
+        <include
+            layout="@layout/index_tab_new_list"
+            android:visibility="gone" />
     </LinearLayout>
 
 </ScrollView>

@@ -23,9 +23,18 @@ public class BDBitmapLruCache extends LruCache<String, Bitmap> implements ImageC
     public Bitmap getBitmap(String url) {
         return get(url);
     }
-
+    
     @Override
     public void putBitmap(String url, Bitmap bitmap) {
         put(url, bitmap);
     }
+
+	@Override
+	protected void entryRemoved(boolean evicted, String key, Bitmap oldValue,
+			Bitmap newValue) {
+		// TODO Auto-generated method stub
+		super.entryRemoved(evicted, key, oldValue, newValue);
+	}
+    
+    
 }

@@ -7,16 +7,18 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Window;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.boredream.BaseActivity;
 import com.boredream.eshop.R;
+import com.boredream.eshop.fragment.CarFragment;
 import com.boredream.eshop.fragment.CategoryFragment;
 import com.boredream.eshop.fragment.HomeFragment;
-import com.boredream.eshop.fragment.MoreFragment;
-import com.boredream.eshop.fragment.SearchFragment;
+import com.boredream.eshop.fragment.MyFavoriteFragment;
+import com.boredream.eshop.fragment.Setting;
 import com.boredream.eshop.receiver.ExitBroadcastReceiver;
 import com.boredream.utils.DialogUtils;
 
@@ -28,8 +30,9 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 	private FragmentManager fm;
 	private HomeFragment homeFragment;
 	private CategoryFragment categoryFragment;
-	private SearchFragment searchFragment;
-	private MoreFragment moreFragment;
+	private MyFavoriteFragment myFavoriteFragment;
+	private CarFragment carFragment;
+	private Setting settingFragment;
 	private RadioGroup rg;
 	
 	private ExitBroadcastReceiver receiver;
@@ -37,6 +40,8 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		setContentView(R.layout.main);
 		
 	    initView();
@@ -89,23 +94,33 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 		}
 	}
 
-	public void attachFragmentSearch() {
+	public void attachFragmentMyFavorite() {
 
-		if (searchFragment == null) {
-			searchFragment = new SearchFragment();
-			ft.add(android.R.id.tabcontent, searchFragment, "search");
+		if (myFavoriteFragment == null) {
+			myFavoriteFragment = new MyFavoriteFragment();
+			ft.add(android.R.id.tabcontent, myFavoriteFragment, "myfavorite");
 		} else {
-			ft.attach(searchFragment);
+			ft.attach(myFavoriteFragment);
+		}
+	}
+	
+	public void attachFragmentCar() {
+		
+		if (carFragment == null) {
+			carFragment = new CarFragment();
+			ft.add(android.R.id.tabcontent, carFragment, "car");
+		} else {
+			ft.attach(carFragment);
 		}
 	}
 
-	public void attachFragmentMore() {
+	public void attachFragmentSetting() {
 
-		if (moreFragment == null) {
-			moreFragment = new MoreFragment();
-			ft.add(android.R.id.tabcontent, moreFragment, "more");
+		if (settingFragment == null) {
+			settingFragment = new Setting();
+			ft.add(android.R.id.tabcontent, settingFragment, "more");
 		} else {
-			ft.attach(moreFragment);
+			ft.attach(settingFragment);
 		}
 	}
 
@@ -141,13 +156,17 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 			attachFragmentCategory();
 			CURRENT_TAB = 2;
 			break;
-		case R.id.main_tab_car:
-			attachFragmentSearch();
+		case R.id.main_tab_my_favorite:
+			attachFragmentMyFavorite();
 			CURRENT_TAB = 3;
 			break;
-		case R.id.main_tab_more:
-			attachFragmentMore();
+		case R.id.main_tab_car:
+			attachFragmentCar();
 			CURRENT_TAB = 4;
+			break;
+		case R.id.main_tab_more:
+			attachFragmentSetting();
+			CURRENT_TAB = 5;
 			break;
 		default:
 			break;
@@ -161,8 +180,9 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 		homeFragment = (HomeFragment) fm.findFragmentByTag("home");
 		categoryFragment = (CategoryFragment) fm
 				.findFragmentByTag("category");
-		searchFragment = (SearchFragment) fm.findFragmentByTag("search");
-		moreFragment = (MoreFragment) fm.findFragmentByTag("more");
+		myFavoriteFragment = (MyFavoriteFragment) fm.findFragmentByTag("myfavorite");
+		carFragment = (CarFragment) fm.findFragmentByTag("car");
+		settingFragment = (Setting) fm.findFragmentByTag("more");
 		ft = fm.beginTransaction();
 
 		/** 如果存在Detaches掉 */
@@ -174,12 +194,16 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 			ft.detach(categoryFragment);
 
 		/** 如果存在Detaches掉 */
-		if (searchFragment != null)
-			ft.detach(searchFragment);
+		if (myFavoriteFragment != null)
+			ft.detach(myFavoriteFragment);
+		
+		/** 如果存在Detaches掉 */
+		if (carFragment != null)
+			ft.detach(carFragment);
 
 		/** 如果存在Detaches掉 */
-		if (moreFragment != null)
-			ft.detach(moreFragment);
+		if (settingFragment != null)
+			ft.detach(settingFragment);
 	}
 
 }

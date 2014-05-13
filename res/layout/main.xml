@@ -4,8 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <include layout="@layout/layout_titlebar" />
-
     <FrameLayout
         android:id="@android:id/tabcontent"
         android:layout_width="fill_parent"
@@ -40,34 +38,33 @@
                 android:id="@+id/main_tab_home"
                 style="@style/main_tab_bottom"
                 android:drawableTop="@drawable/main_navigation_home"
-                android:text="@string/main_navigation_home" />
+                android:text="@string/tab_topic" />
 
             <RadioButton
                 android:id="@+id/main_tab_catagory"
                 style="@style/main_tab_bottom"
                 android:drawableTop="@drawable/main_navigation_catagory"
-                android:text="@string/main_navigation_catagory" />
+                android:text="@string/tab_category" />
+
+            <RadioButton
+                android:id="@+id/main_tab_my_favorite"
+                style="@style/main_tab_bottom"
+                android:drawableTop="@drawable/main_navigation_personal"
+                android:text="@string/tab_my_favorite" />
 
             <RadioButton
                 android:id="@+id/main_tab_car"
                 style="@style/main_tab_bottom"
                 android:layout_height="fill_parent"
                 android:drawablePadding="5dp"
-                android:drawableTop="@drawable/search_friends"
-                android:text="@string/main_navigation_search" />
-
-            <RadioButton
-                android:id="@+id/main_tab_buy"
-                style="@style/main_tab_bottom"
-                android:drawableTop="@drawable/main_navigation_personal"
-                android:text="@string/main_code_buy"
-                android:visibility="gone" />
+                android:drawableTop="@drawable/main_navigation_car"
+                android:text="@string/tab_shopping_cart" />
 
             <RadioButton
                 android:id="@+id/main_tab_more"
                 style="@style/main_tab_bottom"
                 android:drawableTop="@drawable/main_navigation_more"
-                android:text="@string/main_navigation_more" />
+                android:text="@string/tab_setting" />
         </RadioGroup>
     </LinearLayout>
 

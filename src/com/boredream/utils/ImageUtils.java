@@ -4,12 +4,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import com.boredream.eshop.R;
+
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -114,4 +120,61 @@ public class ImageUtils {
 		return path;
 	}
 	
+	public static void getBitmap(Context context) {
+		BitmapFactory.Options opts = new BitmapFactory.Options();
+		opts.inJustDecodeBounds = true;
+		BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher, opts);
+
+		opts.inSampleSize = computeSampleSize(opts, -1, 128*128);
+		opts.inPreferredConfig = Bitmap.Config.RGB_565;
+		opts.inJustDecodeBounds = false;
+		try {
+			Bitmap bmp = BitmapFactory.decodeResource(
+					context.getResources(), R.drawable.ic_launcher, opts);
+		    } catch (OutOfMemoryError err) {
+		}
+	}
+	
+	public static int computeSampleSize(BitmapFactory.Options options,
+	        int minSideLength, int maxNumOfPixels) {
+	    int initialSize = computeInitialSampleSize(options, minSideLength,maxNumOfPixels);
+
+	    int roundedSize;
+	    if (initialSize <= 8 ) {
+	        roundedSize = 1;
+	        while (roundedSize < initialSize) {
+	            roundedSize <<= 1;
+	        }
+	    } else {
+	        roundedSize = (initialSize + 7) / 8 * 8;
+	    }
+
+	    return roundedSize;
+	}
+
+	private static int computeInitialSampleSize(BitmapFactory.Options options,int minSideLength, int maxNumOfPixels) {
+	    double w = options.outWidth;
+	    double h = options.outHeight;
+
+	    int lowerBound = (maxNumOfPixels == -1) ? 1 :
+	            (int) Math.ceil(Math.sqrt(w * h / maxNumOfPixels));
+	    int upperBound = (minSideLength == -1) ? 128 :
+	            (int) Math.min(Math.floor(w / minSideLength),
+	            Math.floor(h / minSideLength));
+
+	    if (upperBound < lowerBound) {
+	        // return the larger one when there is no overlapping zone.
+	        return lowerBound;
+	    }
+
+	    if ((maxNumOfPixels == -1) &&
+	            (minSideLength == -1)) {
+	        return 1;
+	    } else if (minSideLength == -1) {
+	        return lowerBound;
+	    } else {
+	        return upperBound;
+	    }
+	}
+
 }

@@ -80,8 +80,10 @@ public class CategoryExpAdapter extends BaseExpandableListAdapter {
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
 		View view = View.inflate(context, R.layout.item_text, null);
-		TextView tv = (TextView) view.findViewById(R.id.textitem_tv);
+		TextView tv = (TextView) view.findViewById(R.id.textitem_tv_name);
+		TextView tvInfo = (TextView) view.findViewById(R.id.textitem_tv_info);
 		tv.setText(getGroup(groupPosition));
+		tvInfo.setText("ÏêÇéXXX");
 		return view;
 	}
 
@@ -89,8 +91,10 @@ public class CategoryExpAdapter extends BaseExpandableListAdapter {
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
 		View view = View.inflate(context, R.layout.item_text, null);
-		TextView tv = (TextView) view.findViewById(R.id.textitem_tv);
+		TextView tv = (TextView) view.findViewById(R.id.textitem_tv_name);
+		TextView tvInfo = (TextView) view.findViewById(R.id.textitem_tv_info);
 		tv.setText(getChild(groupPosition, childPosition));
+		tvInfo.setText("ÏêÇéXXX");
 		return view;
 	}
 

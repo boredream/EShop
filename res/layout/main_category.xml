@@ -4,6 +4,8 @@
     android:layout_height="fill_parent"
     android:background="#ffefebe7" >
     
+    <include layout="@layout/layout_titlebar"/>
+    
     <ExpandableListView 
         android:id="@+id/category_explv"
         android:groupIndicator="@null"

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="95.0dip"
+    android:layout_marginLeft="10.0dip"
+    android:layout_marginRight="10.0dip"
+    android:layout_marginTop="5.0dip"
+    android:background="@drawable/cell_bg" >
+
+    <RelativeLayout
+        android:id="@+id/goods_img_wrap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2.0dip" >
+
+        <ImageView
+            android:id="@+id/index_item_img"
+            android:layout_width="90.0dip"
+            android:layout_height="90.0dip"
+            android:layout_centerInParent="true"
+            android:paddingBottom="5.0dip"
+            android:src="@drawable/ic_launcher" />
+
+        <ImageView
+            android:id="@+id/sale_item_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/cu_icon_new"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5.0dip"
+        android:layout_marginTop="10.0dip"
+        android:layout_toRightOf="@id/goods_img_wrap"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:orientation="horizontal"
+            android:paddingTop="6.0dip" >
+
+            <TextView
+                android:id="@+id/index_item_content"
+                style="@style/index_item_name_style"
+                android:layout_marginRight="15.0dip"
+                android:maxLines="2" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="6.0dip"
+            android:layout_marginTop="8.0dip" >
+
+            <TextView
+                android:id="@+id/index_item_price"
+                style="@style/new_index_item_price_style"
+                android:layout_alignParentBottom="true"
+                android:text="99.9元" />
+
+            <TextView
+                android:id="@+id/index_item_old_price"
+                style="@style/new_index_item_old_price_style"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="10.0dip"
+                android:layout_toRightOf="@id/index_item_price" />
+
+            <RelativeLayout
+                android:id="@+id/btn_buy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:paddingLeft="10.0dip"
+                android:paddingTop="10.0dip" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5.0dip"
+                    android:background="@color/alpha_all"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:src="@drawable/btn_buy_bg2" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

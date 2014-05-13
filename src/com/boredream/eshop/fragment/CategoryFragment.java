@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.boredream.BaseFragment;
 import com.boredream.eshop.R;
@@ -26,6 +27,8 @@ public class CategoryFragment extends BaseFragment{
 		explv = (ExpandableListView) view.findViewById(R.id.category_explv);
 		adapter = new CategoryExpAdapter(activity);
 		explv.setAdapter(adapter);
+		TextView tvTitile = (TextView) view.findViewById(R.id.titlebar_tv_title);
+		tvTitile.setText("商品分类");
 		return view;
 	}
 

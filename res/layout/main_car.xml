@@ -29,7 +29,7 @@
             android:layout_below="@+id/shopping_cat_icon"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20.0dip"
-            android:text="@string/cart_item_hint" />
+            android:text="您的购物车还是空的" />
     </RelativeLayout>
 
     <Button

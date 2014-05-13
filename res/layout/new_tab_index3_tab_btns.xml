@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="60dp"
+    android:baselineAligned="true"
+    android:orientation="horizontal"
+    android:paddingBottom="5.0dip"
+    android:paddingTop="5.0dip" >
+
+    <LinearLayout
+        android:id="@+id/hot"
+        android:layout_width="0.0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="1.0"
+        android:background="@drawable/hot_top_tab_btn_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/new_tab_index3_hot_item"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/hot_top_tab_text_bg"
+            android:clickable="false"
+            android:duplicateParentState="true"
+            android:focusable="false"
+            android:gravity="center"
+            android:text="@string/hot"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sale"
+        android:layout_width="0.0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="1.0"
+        android:background="@drawable/hot_top_tab_btn_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/new_tab_index3_sale_item"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/hot_top_tab_text_bg"
+            android:clickable="false"
+            android:duplicateParentState="true"
+            android:focusable="false"
+            android:gravity="center"
+            android:text="@string/sale"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/new_product"
+        android:layout_width="0.0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="1.0"
+        android:background="@drawable/hot_top_tab_btn_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/new_tab_index3_new_item"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/hot_top_tab_text_bg"
+            android:clickable="false"
+            android:duplicateParentState="true"
+            android:focusable="false"
+            android:gravity="center"
+            android:text="@string/new_product"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+</LinearLayout>

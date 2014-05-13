@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:uxiang="http://schemas.android.com/apk/res/com.linkshop.client.uxiang"
+    android:id="@+id/top_framelayout"
+    android:layout_width="fill_parent"
+    android:layout_height="160.0dip" >
+
+    <RelativeLayout
+        android:id="@+id/bannerflipperlinear"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <!--
+             <android.support.v4.view.ViewPager
+            android:id="@+id/banner_viewpage"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+        -->
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="160dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/t2" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/shop_title_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="35.0dip"
+        android:layout_gravity="top|left|center"
+        android:background="#2f000000"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="5.0dip" >
+
+        <ImageView
+            android:id="@+id/shoplogo_iv"
+            android:layout_width="25.0dip"
+            android:layout_height="25.0dip"
+            android:src="@drawable/about_xlogo" />
+
+        <TextView
+            android:id="@+id/shopname_tv"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="5.0dip"
+            android:text="宁海小小超市为您服务"
+            android:textColor="@color/white"
+            android:textSize="16.0sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/banner_search_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="5.0dip" >
+
+        <include layout="@layout/top_search_layout" />
+    </LinearLayout>
+
+</FrameLayout>
