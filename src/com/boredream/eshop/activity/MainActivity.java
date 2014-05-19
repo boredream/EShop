@@ -18,7 +18,7 @@ import com.boredream.eshop.fragment.CarFragment;
 import com.boredream.eshop.fragment.CategoryFragment;
 import com.boredream.eshop.fragment.HomeFragment;
 import com.boredream.eshop.fragment.MyFavoriteFragment;
-import com.boredream.eshop.fragment.Setting;
+import com.boredream.eshop.fragment.SettingFragment;
 import com.boredream.eshop.receiver.ExitBroadcastReceiver;
 import com.boredream.utils.DialogUtils;
 
@@ -32,7 +32,7 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 	private CategoryFragment categoryFragment;
 	private MyFavoriteFragment myFavoriteFragment;
 	private CarFragment carFragment;
-	private Setting settingFragment;
+	private SettingFragment settingFragment;
 	private RadioGroup rg;
 	
 	private ExitBroadcastReceiver receiver;
@@ -40,7 +40,6 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		setContentView(R.layout.main);
 		
@@ -117,7 +116,7 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 	public void attachFragmentSetting() {
 
 		if (settingFragment == null) {
-			settingFragment = new Setting();
+			settingFragment = new SettingFragment();
 			ft.add(android.R.id.tabcontent, settingFragment, "more");
 		} else {
 			ft.attach(settingFragment);
@@ -182,7 +181,7 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 				.findFragmentByTag("category");
 		myFavoriteFragment = (MyFavoriteFragment) fm.findFragmentByTag("myfavorite");
 		carFragment = (CarFragment) fm.findFragmentByTag("car");
-		settingFragment = (Setting) fm.findFragmentByTag("more");
+		settingFragment = (SettingFragment) fm.findFragmentByTag("more");
 		ft = fm.beginTransaction();
 
 		/** Èç¹û´æÔÚDetachesµô */

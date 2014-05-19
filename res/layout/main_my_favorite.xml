@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <include layout="@layout/layout_titlebar" />
+
+    <RadioGroup
+        android:id="@+id/myfavorite_rg"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/top_tab_bg"
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp" >
+
+        <RadioButton
+            android:id="@+id/myfavorite_rb_recent"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_weight="1"
+            android:checked="true"
+            android:background="@drawable/top_tab_btn_bg_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:text="最近浏览"
+            android:textColor="@drawable/tab_text_selector" />
+
+        <RadioButton
+            android:id="@+id/myfavorite_rb_collect"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_weight="1"
+            android:background="@drawable/top_tab_btn_bg_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:text="我的收藏"
+            android:textColor="@drawable/tab_text_selector" />
+
+        <RadioButton
+            android:id="@+id/myfavorite_rb_often"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_weight="1"
+            android:background="@drawable/top_tab_btn_bg_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:text="我常买的"
+            android:textColor="@drawable/tab_text_selector" />
+    </RadioGroup>
+
+    <include
+        android:id="@+id/layout_recentlist"
+        layout="@layout/layout_list_full" />
+
+    <include
+        android:id="@+id/layout_collectlist"
+        layout="@layout/layout_list_full"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/layout_oftenlist"
+        layout="@layout/layout_list_full"
+        android:visibility="gone" />
+
+</LinearLayout>

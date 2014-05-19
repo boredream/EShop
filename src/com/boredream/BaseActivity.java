@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Window;
 import android.widget.Toast;
 
 import com.boredream.eshop.constants.CommonConstants;
@@ -34,12 +33,9 @@ public abstract class BaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		tag = this.getClass().getSimpleName();
 		showLog("onCreate()", 2);
-		
 		application = (BaseApplication) getApplication();
-		
 		if(getIntent() != null) {
 			bundle = getIntent().getExtras();
 		}

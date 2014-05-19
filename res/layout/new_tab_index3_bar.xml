@@ -23,7 +23,7 @@
             android:layout_width="fill_parent"
             android:layout_height="160dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/t2" />
+            android:src="@drawable/banner_pic" />
     </RelativeLayout>
 
     <LinearLayout

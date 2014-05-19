@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:orientation="vertical"
     android:background="#ffefebe7" >
     
     <include layout="@layout/layout_titlebar"/>
     
-    <ExpandableListView 
-        android:id="@+id/category_explv"
-        android:groupIndicator="@null"
+    <ListView 
+        android:id="@+id/category_lv"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:cacheColorHint="#0000"

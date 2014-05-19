@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tab_shopping_cart_item_free_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingLeft="10.0dip"
+    android:paddingRight="10.0dip"
+    android:visibility="gone" >
+
+    <ImageView
+        android:id="@+id/shopping_list_item_free_img"
+        android:layout_width="80.0dip"
+        android:layout_height="80.0dip"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginTop="10.0dip" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="10.0dip"
+        android:layout_toRightOf="@id/shopping_list_item_free_img"
+        android:orientation="vertical"
+        android:paddingLeft="10.0dip" >
+
+        <TextView
+            android:id="@+id/shopping_list_item_free_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5.0dip"
+            android:paddingLeft="10.0dip"
+            android:singleLine="false"
+            android:textColor="@color/black"
+            android:textSize="14.0dip" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginTop="10.0dip"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5.0dip"
+                android:text="数量"
+                android:textSize="14.0dip" />
+
+            <TextView
+                android:layout_width="40.0dip"
+                android:layout_height="30.0dip"
+                android:layout_marginRight="5.0dip"
+                android:background="@drawable/countbg"
+                android:gravity="center"
+                android:text="1"
+                android:textSize="12.0sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5.0dip"
+                android:text="单价："
+                android:textSize="14.0dip" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="免费赠送"
+                android:textColor="@color/red"
+                android:textSize="14.0dip" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <include
+        layout="@layout/loading_large"
+        android:visibility="gone" />
+
+    <include
+        layout="@layout/item_empty"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/list_lv"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:divider="@drawable/split_line"
+        android:dividerHeight="1dip" />
+
+</LinearLayout>

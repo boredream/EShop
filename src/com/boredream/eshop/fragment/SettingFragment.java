@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.boredream.BaseFragment;
 import com.boredream.eshop.R;
 
-public class Setting extends BaseFragment{
+public class SettingFragment extends BaseFragment{
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,7 @@ public class Setting extends BaseFragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.main_more, container, false);
+		return inflater.inflate(R.layout.main_setting, container, false);
 	}
 
 }

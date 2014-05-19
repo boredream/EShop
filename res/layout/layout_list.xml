@@ -13,12 +13,11 @@
         android:visibility="gone" />
 
     <ListView
-        android:id="@+id/hot_listview"
+        android:id="@+id/list_lv"
         android:layout_width="fill_parent"
-        android:layout_height="0.0dip"
+        android:layout_height="fill_parent"
         android:layout_marginLeft="10.0dip"
         android:layout_marginRight="10.0dip"
-        android:layout_weight="1.0"
         android:divider="#00000000"
         android:dividerHeight="4.0dip" />
 

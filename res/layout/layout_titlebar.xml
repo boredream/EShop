@@ -3,7 +3,7 @@
     android:id="@+id/top_relative"
     android:layout_width="fill_parent"
     android:layout_height="50.0dip"
-    android:background="#106184" >
+    android:background="@color/title_red" >
 
     <Button
         android:id="@+id/titlebar_btn_back"

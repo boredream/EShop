@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.boredream.eshop.view.MyScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#ffefebe7"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:scrollbars="none" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -12,17 +13,35 @@
 
         <include layout="@layout/new_tab_index3_bar" />
 
+        <LinearLayout
+            android:id="@+id/item_detail_image_linear"
+            android:layout_width="fill_parent"
+            android:layout_height="2.0dip"
+            android:background="#ffcdcdcd"
+            android:orientation="horizontal" >
+
+            <View
+                android:id="@+id/item_images_cursor"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:background="@color/red" />
+        </LinearLayout>
+
         <include layout="@layout/new_tab_index3_tab_btns" />
 
-        <include layout="@layout/index_tab_hot_list" />
+        <include
+            android:id="@+id/layout_hotlist"
+            layout="@layout/layout_list" />
 
         <include
-            layout="@layout/index_tab_promotion_list"
+            android:id="@+id/layout_salelist"
+            layout="@layout/layout_list"
             android:visibility="gone" />
 
         <include
-            layout="@layout/index_tab_new_list"
+            android:id="@+id/layout_newlist"
+            layout="@layout/layout_list"
             android:visibility="gone" />
     </LinearLayout>
 
-</ScrollView>
+</com.boredream.eshop.view.MyScrollView>

@@ -4,16 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.boredream.BaseFragment;
 import com.boredream.eshop.R;
-import com.boredream.eshop.adapter.CategoryExpAdapter;
+import com.boredream.eshop.adapter.CategoryRootAdapter;
 
 public class CategoryFragment extends BaseFragment{
-	private ExpandableListView explv;
-	private CategoryExpAdapter adapter;
+	private ListView lv;
+	private CategoryRootAdapter adapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -24,11 +24,13 @@ public class CategoryFragment extends BaseFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.main_category, container, false);
-		explv = (ExpandableListView) view.findViewById(R.id.category_explv);
-		adapter = new CategoryExpAdapter(activity);
-		explv.setAdapter(adapter);
+		
 		TextView tvTitile = (TextView) view.findViewById(R.id.titlebar_tv_title);
 		tvTitile.setText("商品分类");
+		
+		lv = (ListView) view.findViewById(R.id.category_lv);
+		adapter = new CategoryRootAdapter(activity, 0);
+		lv.setAdapter(adapter);
 		return view;
 	}
 

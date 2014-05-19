@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="95.0dip"
     android:layout_marginLeft="10.0dip"
     android:layout_marginRight="10.0dip"
-    android:layout_marginTop="5.0dip"
-    android:background="@drawable/cell_bg" >
+    android:background="@drawable/cell_bg"
+    android:gravity="center_vertical"
+    android:orientation="horizontal" >
 
     <RelativeLayout
         android:id="@+id/goods_img_wrap"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2.0dip" >
+        android:layout_height="fill_parent" >
 
         <ImageView
             android:id="@+id/index_item_img"
-            android:layout_width="90.0dip"
-            android:layout_height="90.0dip"
-            android:layout_centerInParent="true"
-            android:paddingBottom="5.0dip"
+            android:padding="5dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:src="@drawable/ic_launcher" />
 
         <ImageView
@@ -27,25 +26,22 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/cu_icon_new"
-            android:visibility="gone" />
+            android:src="@drawable/cu_icon_new"/>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_centerVertical="true"
+        android:layout_marginBottom="6dp"
         android:layout_marginLeft="5.0dip"
         android:layout_marginTop="10.0dip"
-        android:layout_toRightOf="@id/goods_img_wrap"
         android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="top"
-            android:orientation="horizontal"
-            android:paddingTop="6.0dip" >
+            android:orientation="horizontal" >
 
             <TextView
                 android:id="@+id/index_item_content"
@@ -56,10 +52,8 @@
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="6.0dip"
-            android:layout_marginTop="8.0dip" >
+            android:layout_height="fill_parent"
+            android:paddingBottom="6.0dip" >
 
             <TextView
                 android:id="@+id/index_item_price"
@@ -74,26 +68,19 @@
                 android:layout_marginLeft="10.0dip"
                 android:layout_toRightOf="@id/index_item_price" />
 
-            <RelativeLayout
-                android:id="@+id/btn_buy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/index_item_iv_buy"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
                 android:layout_alignParentBottom="true"
-                android:paddingLeft="10.0dip"
-                android:paddingTop="10.0dip" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="5.0dip"
-                    android:background="@color/alpha_all"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:src="@drawable/btn_buy_bg2" />
-            </RelativeLayout>
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:background="@color/alpha_all"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/btn_buy_bg2" />
         </RelativeLayout>
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>
