@@ -10,14 +10,17 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.TextView;
 
 import com.boredream.BaseFragment;
 import com.boredream.eshop.R;
-import com.boredream.eshop.activity.DetailActivity;
+import com.boredream.eshop.activity.GoodDetailActivity;
 import com.boredream.eshop.adapter.DealGoodAdapter;
 import com.boredream.eshop.bean.DealGood;
 import com.boredream.eshop.constants.HandlerWhatConstants;
@@ -25,14 +28,13 @@ import com.boredream.eshop.test.Datas;
 
 public class MyFavoriteFragment extends BaseFragment implements OnCheckedChangeListener {
 	
-	/**
-	 * 1-Recent 2-Collect 3-Often
-	 */
-	private int type;
 	private RadioGroup rg;
 	private LinearLayout llRecent;
 	private LinearLayout llCollect;
 	private LinearLayout llOften;
+	private FrameLayout rlEmptyRecent;
+	private FrameLayout rlEmptyCollect;
+	private FrameLayout rlEmptyOften;
 	private ListView lvRecent;
 	private ListView lvCollect;
 	private ListView lvOften;
@@ -40,32 +42,10 @@ public class MyFavoriteFragment extends BaseFragment implements OnCheckedChangeL
 	private DealGoodAdapter collectAdapter;
 	private DealGoodAdapter oftenAdapter;
 	
-	@SuppressLint("HandlerLeak")
-	private Handler handler = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			switch (msg.what) {
-			case HandlerWhatConstants.GOOD_DETAIL:
-				if(msg.obj instanceof DealGood) {
-					DealGood dealGood = (DealGood) msg.obj;
-					Intent intent = new Intent(activity, DetailActivity.class);
-					intent.putExtra("good", dealGood);
-					startActivity(intent);
-				}
-				break;
-
-			default:
-				break;
-			}
-		}
-		
-	};
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		System.out.println("onCreateView");
 		View view = inflater.inflate(R.layout.main_my_favorite, container, false);
 		rg = (RadioGroup) view.findViewById(R.id.myfavorite_rg);
 		rg.setOnCheckedChangeListener(this);
@@ -73,19 +53,27 @@ public class MyFavoriteFragment extends BaseFragment implements OnCheckedChangeL
 		llRecent = (LinearLayout) view.findViewById(R.id.layout_recentlist);
 		llCollect = (LinearLayout) view.findViewById(R.id.layout_collectlist);
 		llOften = (LinearLayout) view.findViewById(R.id.layout_oftenlist);
+		rlEmptyRecent = (FrameLayout) llRecent.findViewById(R.id.item_empty_layout);
+		rlEmptyCollect = (FrameLayout) llCollect.findViewById(R.id.item_empty_layout);
+		rlEmptyOften = (FrameLayout) llOften.findViewById(R.id.item_empty_layout);
+		TextView tvRecentEmpty = (TextView) llRecent.findViewById(R.id.item_empty_tv);
+		TextView tvCollectEmpty = (TextView) llCollect.findViewById(R.id.item_empty_tv);
+		TextView tvOftenEmpty = (TextView) llOften.findViewById(R.id.item_empty_tv);
 		lvRecent = (ListView) llRecent.findViewById(R.id.list_lv);
 		lvCollect = (ListView) llCollect.findViewById(R.id.list_lv);
 		lvOften = (ListView) llOften.findViewById(R.id.list_lv);
-		recentAdapter = new DealGoodAdapter(activity, handler);
-		collectAdapter = new DealGoodAdapter(activity, handler);
-		oftenAdapter = new DealGoodAdapter(activity, handler);
+		recentAdapter = new DealGoodAdapter(activity);
+		collectAdapter = new DealGoodAdapter(activity);
+		oftenAdapter = new DealGoodAdapter(activity);
 		lvRecent.setAdapter(recentAdapter);
 		lvCollect.setAdapter(collectAdapter);
 		lvOften.setAdapter(oftenAdapter);
 		
-		List<DealGood> RecentGoods = Datas.getRecentGoods();
+		List<DealGood> RecentGoods = Datas.getDealGoods();
 		recentAdapter.addDealGoods(RecentGoods);
-		type = 1;
+		
+		((RadioButton)rg.getChildAt(activity.myFavoriteType)).setChecked(true);
+		
 		return view;
 	}
 
@@ -96,32 +84,48 @@ public class MyFavoriteFragment extends BaseFragment implements OnCheckedChangeL
 	
 	@Override
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		checkItem(checkedId);
+	}
+
+	private void checkItem(int checkedId) {
 		switch (checkedId) {
 		case R.id.myfavorite_rb_recent:
-			type = 1;
-			llRecent.setVisibility(View.VISIBLE);
-			llCollect.setVisibility(View.GONE);
-			llOften.setVisibility(View.GONE);
-			System.out.println("type"+type);
+			activity.myFavoriteType = 0;
+			showRecent();
 			break;
 		case R.id.myfavorite_rb_collect:
-			type = 2;
-			llRecent.setVisibility(View.GONE);
-			llCollect.setVisibility(View.VISIBLE);
-			llOften.setVisibility(View.GONE);
-			System.out.println("type"+type);
+			activity.myFavoriteType = 1;
+			showCollect();
 			break;
 		case R.id.myfavorite_rb_often:
-			type = 3;
-			llRecent.setVisibility(View.GONE);
-			llCollect.setVisibility(View.GONE);
-			llOften.setVisibility(View.VISIBLE);
-			System.out.println("type"+type);
+			activity.myFavoriteType = 2;
+			showOften();
 			break;
 
 		default:
 			break;
 		}
+	}
+
+	private void showOften() {
+		llRecent.setVisibility(View.GONE);
+		llCollect.setVisibility(View.GONE);
+		llOften.setVisibility(View.VISIBLE);
+		System.out.println("type"+activity.myFavoriteType);
+	}
+
+	private void showCollect() {
+		llRecent.setVisibility(View.GONE);
+		llCollect.setVisibility(View.VISIBLE);
+		llOften.setVisibility(View.GONE);
+		System.out.println("type"+activity.myFavoriteType);
+	}
+
+	private void showRecent() {
+		llRecent.setVisibility(View.VISIBLE);
+		llCollect.setVisibility(View.GONE);
+		llOften.setVisibility(View.GONE);
+		System.out.println("type"+activity.myFavoriteType);
 	}
 
 }

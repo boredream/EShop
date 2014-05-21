@@ -36,7 +36,9 @@
 
     <include layout="@layout/shopping_list_empty" />
 
-    <include layout="@layout/loading_large" />
+    <include 
+        android:visibility="gone"
+        layout="@layout/loading_large" />
 
     <FrameLayout
         android:id="@+id/shopping_cart_frame"
@@ -125,14 +127,16 @@
 
                     <include layout="@layout/more_line_split" />
 
-                    <include layout="@layout/tab_shoping_cart_free_item" />
+                    <include 
+                        android:visibility="gone"
+                        layout="@layout/tab_shoping_cart_free_item" />
 
                     <RelativeLayout
+                        android:visibility="gone"
                         android:id="@+id/tab_shopping_promotion"
                         style="@style/more_row_item"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/detail_btn_selector"
-                        android:onClick="handlePromotion" >
+                        android:background="@drawable/detail_btn_selector" >
 
                         <TextView
                             android:id="@+id/order_check_address_tv"
@@ -160,6 +164,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/nofinished_activity_layout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"

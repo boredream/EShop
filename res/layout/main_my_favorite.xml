@@ -23,7 +23,6 @@
             android:layout_width="0dp"
             android:layout_height="38dp"
             android:layout_weight="1"
-            android:checked="true"
             android:background="@drawable/top_tab_btn_bg_selector"
             android:button="@null"
             android:gravity="center"

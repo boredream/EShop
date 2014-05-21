@@ -14,8 +14,7 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_alignParentLeft="true"
-            android:onClick="handleBack" >
+            android:layout_alignParentLeft="true" >
 
             <ImageView
                 android:id="@+id/app_back_btn"
@@ -24,7 +23,6 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10.0dip"
-                android:onClick="handleBack"
                 android:src="@drawable/btn_back" />
 
             <TextView
@@ -33,7 +31,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5.0dip"
                 android:layout_toRightOf="@id/app_back_btn"
-                android:onClick="handleBack"
                 android:text="返回"
                 android:textColor="@color/white"
                 android:textSize="18.0sp" />
@@ -371,7 +368,8 @@
                     android:textColor="@color/post_area_left_color"
                     android:textSize="16.0sp" />
 
-                <!-- <com.linkshop.client.uxiang.androidext.ui.linearlistivew.LinearLayoutForListView
+                <!--
+                     <com.linkshop.client.uxiang.androidext.ui.linearlistivew.LinearLayoutForListView
                     android:id="@+id/item_detail_my_interest"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -380,7 +378,8 @@
                     android:layout_marginRight="10.0dip"
                     android:background="@drawable/more_border_no_corner"
                     android:orientation="vertical"
-                    android:paddingTop="10.0dip" /> -->
+                    android:paddingTop="10.0dip" />
+                -->
             </LinearLayout>
         </ScrollView>
 
@@ -400,8 +399,7 @@
                 android:layout_height="50.0dip"
                 android:layout_centerVertical="true"
                 android:background="@drawable/catv2"
-                android:duplicateParentState="true"
-                android:onClick="handleShoppingList" />
+                android:duplicateParentState="true" />
 
             <TextView
                 android:id="@+id/shopping_cart_num"

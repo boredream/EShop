@@ -53,7 +53,7 @@
                 android:text="@string/tab_my_favorite" />
 
             <RadioButton
-                android:id="@+id/main_tab_car"
+                android:id="@+id/main_tab_cart"
                 style="@style/main_tab_bottom"
                 android:layout_height="fill_parent"
                 android:drawablePadding="5dp"

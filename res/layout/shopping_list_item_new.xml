@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/cart_del_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:paddingLeft="10.0dip"
+            android:paddingRight="10.0dip"
+            android:visibility="gone" >
+
+            <ImageView
+                android:id="@+id/cart_del_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/icon_cart_delete" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3.0" >
+
+            <ImageView
+                android:id="@+id/shopping_list_item_img"
+                android:layout_width="80.0dip"
+                android:layout_height="80.0dip"
+                android:layout_alignParentLeft="true"
+				android:src="@drawable/ic_launcher"                
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginTop="10.0dip" />
+
+            <TextView
+                android:id="@+id/shopping_list_item_content"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5.0dip"
+                android:layout_marginRight="10.0dip"
+                android:layout_marginTop="10.0dip"
+                android:layout_toRightOf="@id/shopping_list_item_img"
+                android:singleLine="false"
+                android:text="商品名称"
+                android:textColor="@color/black"
+                android:textSize="14.0sp" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/shopping_list_item_content"
+                android:layout_marginLeft="5.0dip"
+                android:layout_marginRight="10.0dip"
+                android:layout_marginTop="10.0dip"
+                android:layout_toRightOf="@id/shopping_list_item_img" >
+
+                <RelativeLayout
+                    android:id="@+id/price_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/shopping_list_item_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="￥12"
+                        android:textColor="@color/red"
+                        android:textSize="16.0sp" />
+
+                    <TextView
+                        android:id="@+id/shopping_list_item_delprice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/shopping_list_item_price"
+                        android:text="￥16"
+                        android:textColor="@color/gray"
+                        android:textSize="16.0sp" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/count_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15.0dip"
+                    android:layout_toRightOf="@id/price_layout" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5.0dip"
+                        android:text="数量"
+                        android:textColor="@color/black"
+                        android:textSize="14.0dip" />
+
+                    <TextView
+                        android:id="@+id/shopping_list_item_num"
+                        android:layout_width="40.0dip"
+                        android:layout_height="30.0dip"
+                        android:layout_marginRight="5.0dip"
+                        android:background="@drawable/countbg"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textSize="12.0sp" />
+                </LinearLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/del_btn_layout"
+            android:layout_width="60.0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0"
+            android:background="@color/red"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="删除"
+                android:textColor="@color/white"
+                android:textSize="16.0sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.5dip"
+        android:background="#ffcdcdcd" />
+
+</LinearLayout>

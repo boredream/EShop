@@ -7,14 +7,13 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Window;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.boredream.BaseActivity;
 import com.boredream.eshop.R;
-import com.boredream.eshop.fragment.CarFragment;
+import com.boredream.eshop.fragment.CartFragment;
 import com.boredream.eshop.fragment.CategoryFragment;
 import com.boredream.eshop.fragment.HomeFragment;
 import com.boredream.eshop.fragment.MyFavoriteFragment;
@@ -24,16 +23,25 @@ import com.boredream.utils.DialogUtils;
 
 public class MainActivity extends FragmentActivity implements OnCheckedChangeListener {
 
-	private int CURRENT_TAB = 1; // 当前选项卡索引
+	/**
+	 *  当前选项卡类型
+	 *  0-home 1-cat 2-favorite 3-cart 4-setting
+	 */
+	private int current_type = 0;
+	/**
+	 * 我的喜好目录类型
+	 * 0-Recent 1-Collect 2-Often
+	 */
+	public int myFavoriteType = 0;
 
 	private FragmentTransaction ft;
 	private FragmentManager fm;
 	private HomeFragment homeFragment;
 	private CategoryFragment categoryFragment;
 	private MyFavoriteFragment myFavoriteFragment;
-	private CarFragment carFragment;
+	private CartFragment cartFragment;
 	private SettingFragment settingFragment;
-	private RadioGroup rg;
+	public RadioGroup rg;
 	
 	private ExitBroadcastReceiver receiver;
 
@@ -45,7 +53,6 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 		
 	    initView();
 	    
-	    ((RadioButton) rg.getChildAt(0)).setChecked(true);
 	}
 	
 	@Override
@@ -56,12 +63,24 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 	@Override
 	public void onStart() {
 		super.onStart();
+		
+		((RadioButton) rg.getChildAt(current_type)).setChecked(true);
 
 		// 在当前的activity中注册广播
 		receiver = new ExitBroadcastReceiver();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(BaseActivity.EXIT_ACTION);
 		registerReceiver(receiver, filter);
+	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		setIntent(intent);
+		Bundle bundle = getIntent().getExtras();
+		if(bundle != null) {
+			current_type = bundle.getInt("type");
+		}
 	}
 	
 	/**
@@ -94,7 +113,7 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 	}
 
 	public void attachFragmentMyFavorite() {
-
+		
 		if (myFavoriteFragment == null) {
 			myFavoriteFragment = new MyFavoriteFragment();
 			ft.add(android.R.id.tabcontent, myFavoriteFragment, "myfavorite");
@@ -103,13 +122,13 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 		}
 	}
 	
-	public void attachFragmentCar() {
+	public void attachFragmentCart() {
 		
-		if (carFragment == null) {
-			carFragment = new CarFragment();
-			ft.add(android.R.id.tabcontent, carFragment, "car");
+		if (cartFragment == null) {
+			cartFragment = new CartFragment();
+			ft.add(android.R.id.tabcontent, cartFragment, "cart");
 		} else {
-			ft.attach(carFragment);
+			ft.attach(cartFragment);
 		}
 	}
 
@@ -149,23 +168,23 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 		switch (checkedId) {
 		case R.id.main_tab_home:
 			attachFragmentHome();
-			CURRENT_TAB = 1;
+			current_type = 0;
 			break;
 		case R.id.main_tab_catagory:
 			attachFragmentCategory();
-			CURRENT_TAB = 2;
+			current_type = 1;
 			break;
 		case R.id.main_tab_my_favorite:
 			attachFragmentMyFavorite();
-			CURRENT_TAB = 3;
+			current_type = 2;
 			break;
-		case R.id.main_tab_car:
-			attachFragmentCar();
-			CURRENT_TAB = 4;
+		case R.id.main_tab_cart:
+			attachFragmentCart();
+			current_type = 3;
 			break;
 		case R.id.main_tab_more:
 			attachFragmentSetting();
-			CURRENT_TAB = 5;
+			current_type = 4;
 			break;
 		default:
 			break;
@@ -180,7 +199,7 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 		categoryFragment = (CategoryFragment) fm
 				.findFragmentByTag("category");
 		myFavoriteFragment = (MyFavoriteFragment) fm.findFragmentByTag("myfavorite");
-		carFragment = (CarFragment) fm.findFragmentByTag("car");
+		cartFragment = (CartFragment) fm.findFragmentByTag("cart");
 		settingFragment = (SettingFragment) fm.findFragmentByTag("more");
 		ft = fm.beginTransaction();
 
@@ -193,12 +212,14 @@ public class MainActivity extends FragmentActivity implements OnCheckedChangeLis
 			ft.detach(categoryFragment);
 
 		/** 如果存在Detaches掉 */
-		if (myFavoriteFragment != null)
+		if (myFavoriteFragment != null) {
 			ft.detach(myFavoriteFragment);
+			myFavoriteFragment = null;
+		}
 		
 		/** 如果存在Detaches掉 */
-		if (carFragment != null)
-			ft.detach(carFragment);
+		if (cartFragment != null)
+			ft.detach(cartFragment);
 
 		/** 如果存在Detaches掉 */
 		if (settingFragment != null)

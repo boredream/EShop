@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -17,6 +16,7 @@ import com.boredream.eshop.R;
 import com.boredream.eshop.adapter.GoodAdapter;
 import com.boredream.eshop.bean.Good;
 import com.boredream.eshop.test.Datas;
+import com.boredream.utils.ViewUtils;
 
 public class HomeFragment extends BaseFragment implements OnCheckedChangeListener {
 	
@@ -24,6 +24,7 @@ public class HomeFragment extends BaseFragment implements OnCheckedChangeListene
 	 * 1-hot 2-sale 3-new
 	 */
 	private int type;
+	
 	private RadioGroup rg;
 	private LinearLayout llHot;
 	private LinearLayout llSale;
@@ -62,7 +63,7 @@ public class HomeFragment extends BaseFragment implements OnCheckedChangeListene
 		List<Good> newGoods = Datas.getNewGoods();
 		newAdapter.addGoods(newGoods);
 		type = 1;
-		setListViewHeightBasedOnChildren(lvHot);
+		ViewUtils.setListViewHeightBasedOnChildren(lvHot);
 		return view;
 	}
 
@@ -71,31 +72,7 @@ public class HomeFragment extends BaseFragment implements OnCheckedChangeListene
 		super.onCreate(savedInstanceState);
 	}
 	
-	// 动态设定ListView的高度
-	public void setListViewHeightBasedOnChildren(ListView listView) {
-		ListAdapter listAdapter = listView
-				.getAdapter();
-
-		if (listAdapter == null) {
-			return;
-		}
-
-		int totalHeight = 0;
-
-		if (listAdapter.getCount() > 0) {
-			View listItem = listAdapter.getView(0, null, listView);
-			listItem.measure(0, 0);
-			totalHeight = listItem.getMeasuredHeight() * listAdapter.getCount();
-
-		}
-
-		ViewGroup.LayoutParams params = listView.getLayoutParams();
-
-		params.height = totalHeight
-				+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-
-		listView.setLayoutParams(params);
-	}
+	
 
 
 	@Override
@@ -106,7 +83,7 @@ public class HomeFragment extends BaseFragment implements OnCheckedChangeListene
 			llHot.setVisibility(View.VISIBLE);
 			llSale.setVisibility(View.GONE);
 			llNew.setVisibility(View.GONE);
-			setListViewHeightBasedOnChildren(lvHot);
+			ViewUtils.setListViewHeightBasedOnChildren(lvHot);
 			System.out.println("type"+type);
 			break;
 		case R.id.sale:
@@ -114,7 +91,7 @@ public class HomeFragment extends BaseFragment implements OnCheckedChangeListene
 			llHot.setVisibility(View.GONE);
 			llSale.setVisibility(View.VISIBLE);
 			llNew.setVisibility(View.GONE);
-			setListViewHeightBasedOnChildren(lvSale);
+			ViewUtils.setListViewHeightBasedOnChildren(lvSale);
 			System.out.println("type"+type);
 			break;
 		case R.id.new_product:
@@ -122,7 +99,7 @@ public class HomeFragment extends BaseFragment implements OnCheckedChangeListene
 			llHot.setVisibility(View.GONE);
 			llSale.setVisibility(View.GONE);
 			llNew.setVisibility(View.VISIBLE);
-			setListViewHeightBasedOnChildren(lvNew);
+			ViewUtils.setListViewHeightBasedOnChildren(lvNew);
 			System.out.println("type"+type);
 			break;
 

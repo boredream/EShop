@@ -59,7 +59,7 @@ public class GoodAdapter extends BaseAdapter {
 			holder.tvName = (TextView) convertView.findViewById(R.id.index_item_content);
 			holder.tvOldPrice = (TextView) convertView.findViewById(R.id.index_item_old_price);
 			holder.tvPrice = (TextView) convertView.findViewById(R.id.index_item_price);
-			holder.ivAdd2Car = (ImageView) convertView.findViewById(R.id.index_item_iv_buy);
+			holder.ivAdd2Cart = (ImageView) convertView.findViewById(R.id.index_item_iv_buy);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -67,12 +67,12 @@ public class GoodAdapter extends BaseAdapter {
 		
 		Good good = getItem(position);
 		holder.tvName.setText(good.getName());
-		holder.tvPrice.setText(good.getPrice());
+		holder.tvPrice.setText(good.getPrice()+"Ԫ");
 		if(good.isSale()) {
 			holder.tvOldPrice.setVisibility(View.VISIBLE);
 			holder.ivSale.setVisibility(View.VISIBLE);
+			holder.tvOldPrice.setText(good.getOldPrice()+"Ԫ");
 			holder.tvOldPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); 
-			holder.tvOldPrice.setText(good.getOldPrice());
 		} else {
 			holder.tvOldPrice.setVisibility(View.GONE);
 			holder.ivSale.setVisibility(View.GONE);
@@ -89,7 +89,7 @@ public class GoodAdapter extends BaseAdapter {
 		TextView tvName;
 		TextView tvOldPrice;
 		TextView tvPrice;
-		ImageView ivAdd2Car;
+		ImageView ivAdd2Cart;
 	}
 
 }
