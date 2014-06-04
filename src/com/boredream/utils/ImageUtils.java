@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import com.boredream.eshop.R;
-
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -13,9 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -25,14 +21,15 @@ public class ImageUtils {
 	
 	public static final int GET_IMAGE_BY_CAMERA = 5001;
 	public static final int GET_IMAGE_FROM_PHONE = 5002;
+	public static Uri imageUriFromCamera;
 
 	/**
-	 * 插入一条数据
+	 * 初始化一个图片地址uri,用于保存拍照后的照片
 	 * 
 	 * @param context
-	 * @return 返回图片的uri
+	 * @return 图片的uri
 	 */
-	public static Uri getImagePathUri(Context context) {
+	public static Uri initImagePathUri(Context context) {
 		Uri imageFilePath = null;
 		String status = Environment.getExternalStorageState();
 		SimpleDateFormat timeFormatter = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINA);
@@ -54,11 +51,13 @@ public class ImageUtils {
 		return imageFilePath;
 	}
 	
-	public static void openCameraImage(final Activity activity, final Uri imageFilePath) {
+	public static void openCameraImage(final Activity activity) {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageFilePath);
+		imageUriFromCamera = ImageUtils.initImagePathUri(activity);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUriFromCamera);
 		activity.startActivityForResult(intent, ImageUtils.GET_IMAGE_BY_CAMERA);
 	}
+	
 	public static void openLocalImage(final Activity activity) {
 		Intent intent = new Intent();
 		/* 开启Pictures画面Type设定为image */
@@ -94,6 +93,14 @@ public class ImageUtils {
 		intent.putExtra("return-data", true);
 		activity.startActivityForResult(intent, request);
 	}
+	
+	public static Bitmap decodeBitmapByUri(Context context, Uri uri) {
+		Bitmap bitmap = null;
+		if(uri != null) {
+			bitmap = BitmapFactory.decodeFile(getImageAbsolutePath(context, uri));
+		}
+		return bitmap;
+	}
 
 	public static String getImageAbsolutePath(Context context, String imageUri) {
 		Uri uri = Uri.parse(imageUri);
@@ -120,61 +127,21 @@ public class ImageUtils {
 		return path;
 	}
 	
-	public static void getBitmap(Context context) {
-		BitmapFactory.Options opts = new BitmapFactory.Options();
-		opts.inJustDecodeBounds = true;
-		BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher, opts);
-
-		opts.inSampleSize = computeSampleSize(opts, -1, 128*128);
-		opts.inPreferredConfig = Bitmap.Config.RGB_565;
-		opts.inJustDecodeBounds = false;
-		try {
-			Bitmap bmp = BitmapFactory.decodeResource(
-					context.getResources(), R.drawable.ic_launcher, opts);
-		    } catch (OutOfMemoryError err) {
+	public static Uri getImageOnActivityResult(Context context, int requestCode, Intent data) {
+		Uri uri = null;
+		switch (requestCode) {
+		// 拍照获取图片
+		case ImageUtils.GET_IMAGE_BY_CAMERA:
+			// ImageUtils.openCameraImage传入自定义uri时系统会将拍摄的照片保存至此uri中
+			// 不传入自定义uri的方式由于是获取缩略图,不采用,可以手动获取压缩实例避免OOM
+			uri = ImageUtils.imageUriFromCamera;
+			break;
+		// 手机相册获取图片
+		case ImageUtils.GET_IMAGE_FROM_PHONE:
+			uri = data.getData();
+			break;
 		}
+		return uri;
 	}
 	
-	public static int computeSampleSize(BitmapFactory.Options options,
-	        int minSideLength, int maxNumOfPixels) {
-	    int initialSize = computeInitialSampleSize(options, minSideLength,maxNumOfPixels);
-
-	    int roundedSize;
-	    if (initialSize <= 8 ) {
-	        roundedSize = 1;
-	        while (roundedSize < initialSize) {
-	            roundedSize <<= 1;
-	        }
-	    } else {
-	        roundedSize = (initialSize + 7) / 8 * 8;
-	    }
-
-	    return roundedSize;
-	}
-
-	private static int computeInitialSampleSize(BitmapFactory.Options options,int minSideLength, int maxNumOfPixels) {
-	    double w = options.outWidth;
-	    double h = options.outHeight;
-
-	    int lowerBound = (maxNumOfPixels == -1) ? 1 :
-	            (int) Math.ceil(Math.sqrt(w * h / maxNumOfPixels));
-	    int upperBound = (minSideLength == -1) ? 128 :
-	            (int) Math.min(Math.floor(w / minSideLength),
-	            Math.floor(h / minSideLength));
-
-	    if (upperBound < lowerBound) {
-	        // return the larger one when there is no overlapping zone.
-	        return lowerBound;
-	    }
-
-	    if ((maxNumOfPixels == -1) &&
-	            (minSideLength == -1)) {
-	        return 1;
-	    } else if (minSideLength == -1) {
-	        return lowerBound;
-	    } else {
-	        return upperBound;
-	    }
-	}
-
 }
